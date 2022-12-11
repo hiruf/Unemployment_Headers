@@ -22,6 +22,7 @@ library(stringr)
 
 ## Data (This section describes the data sources and the data gathering process.)
 
+### Data Collection
 
 ```{r}
 nytime = function (keyword,year) {
@@ -54,7 +55,11 @@ nytime = function (keyword,year) {
 }
 ```
 
+
 ```{r, include = FALSE}
+
+# These are all in seperate code chunks that the API does not get overwhelmed.
+
 api = "ZMG66AOpWqDJ5OqyK9GSZh4mSrWAyapR"
 NY2008 <- nytime('unemployment',2008)
 ```
@@ -86,6 +91,270 @@ NY2020 <- nytime('unemployment',2020)
 ```{r, include = FALSE}
 NY2022 <- nytime('unemployment',2022)
 ```
+
+### Cleaning and Preparing the Data
+
+```{r, include = FALSE}
+# Adding the appropriate year to the data
+U2008<-data.frame(append(NY2008, c(Year='2008'), after=1))
+
+U2010<-data.frame(append(NY2010, c(Year='2010'), after=1))
+
+U2012<-data.frame(append(NY2012, c(Year='2012'), after=1))
+
+U2014<-data.frame(append(NY2014, c(Year='2014'), after=1))
+
+U2016<-data.frame(append(NY2016, c(Year='2016'), after=1))
+
+U2018<-data.frame(append(NY2018, c(Year='2018'), after=1))
+
+U2020<-data.frame(append(NY2020,c(Year='2020'), after=1))
+
+U2022<-data.frame(append(NY2022, c(Year='2022'), after=1))
+```
+
+
+```{r}
+TextDoc2008 <- Corpus(VectorSource(U2008))
+
+edit_text <- content_transformer(function (x , pattern ) gsub(pattern, " ", x))
+
+TextDoc2008 <- tm_map(TextDoc2008, edit_text, "/")
+TextDoc2008 <- tm_map(TextDoc2008, edit_text, "@")
+TextDoc2008 <- tm_map(TextDoc2008, edit_text, "\\|")
+TextDoc2008 <- tm_map(TextDoc2008, content_transformer(tolower))
+TextDoc2008 <- tm_map(TextDoc2008, removeNumbers)
+TextDoc2008 <- tm_map(TextDoc2008, removeWords, stopwords("english"))
+TextDoc2008 <- tm_map(TextDoc2008, removePunctuation)
+TextDoc2008 <- tm_map(TextDoc2008, stripWhitespace)
+TextDoc2010 <- tm_map(TextDoc2008, stemDocument)
+
+head(TextDoc2008)
+TextDoc_dtm_2008 <- TermDocumentMatrix(TextDoc2008)
+
+TextDoc_dtm_2008 <- TermDocumentMatrix(TextDoc2008)
+dtm_m_2008 <- as.matrix(TextDoc_dtm_2008)
+
+# Sort by descearing value of frequency
+dtm_v_2008 <- sort(rowSums(dtm_m_2008),decreasing=TRUE)
+dtm_d_2008 <- data.frame(word = names(dtm_v_2008),freq=dtm_v_2008)
+# Display the top 5 most frequent words
+head(dtm_d_2008, 5)
+```
+
+```{r}
+TextDoc2010 <- Corpus(VectorSource(U2010))
+
+edit_text <- content_transformer(function (x , pattern ) gsub(pattern, " ", x))
+
+TextDoc2010 <- tm_map(TextDoc2010, edit_text, "/")
+TextDoc2010 <- tm_map(TextDoc2010, edit_text, "@")
+TextDoc2010 <- tm_map(TextDoc2010, edit_text, "\\|")
+TextDoc2010 <- tm_map(TextDoc2010, content_transformer(tolower))
+TextDoc2010 <- tm_map(TextDoc2010, removeNumbers)
+TextDoc2010 <- tm_map(TextDoc2010, removeWords, stopwords("english"))
+TextDoc2010 <- tm_map(TextDoc2010, removePunctuation)
+TextDoc2010 <- tm_map(TextDoc2010, stripWhitespace)
+TextDoc2010 <- tm_map(TextDoc2010, stemDocument)
+
+head(TextDoc2010)
+TextDoc_dtm_2010 <- TermDocumentMatrix(TextDoc2010)
+
+TextDoc_dtm_2010 <- TermDocumentMatrix(TextDoc2010)
+dtm_m_2010 <- as.matrix(TextDoc_dtm_2010)
+
+# Sort by descearing value of frequency
+dtm_v_2010 <- sort(rowSums(dtm_m_2010),decreasing=TRUE)
+dtm_d_2010 <- data.frame(word = names(dtm_v_2010),freq=dtm_v_2010)
+# Display the top 5 most frequent words
+head(dtm_d_2010, 5)
+```
+
+```{r}
+TextDoc2012 <- Corpus(VectorSource(U2012))
+
+edit_text <- content_transformer(function (x , pattern ) gsub(pattern, " ", x))
+
+TextDoc2012 <- tm_map(TextDoc2012, edit_text, "/")
+TextDoc2012 <- tm_map(TextDoc2012, edit_text, "@")
+TextDoc2012 <- tm_map(TextDoc2012, edit_text, "\\|")
+TextDoc2012 <- tm_map(TextDoc2012, content_transformer(tolower))
+TextDoc2012 <- tm_map(TextDoc2012, removeNumbers)
+TextDoc2012 <- tm_map(TextDoc2012, removeWords, stopwords("english"))
+TextDoc2012 <- tm_map(TextDoc2012, removePunctuation)
+TextDoc2012 <- tm_map(TextDoc2012, stripWhitespace)
+TextDoc2012 <- tm_map(TextDoc2012, stemDocument)
+
+head(TextDoc2012)
+TextDoc_dtm_2012 <- TermDocumentMatrix(TextDoc2012)
+
+TextDoc_dtm_2012 <- TermDocumentMatrix(TextDoc2012)
+dtm_m_2012 <- as.matrix(TextDoc_dtm_2012)
+
+# Sort by descearing value of frequency
+dtm_v_2012 <- sort(rowSums(dtm_m_2012),decreasing=TRUE)
+dtm_d_2012 <- data.frame(word = names(dtm_v_2012),freq=dtm_v_2012)
+# Display the top 5 most frequent words
+head(dtm_d_2012, 5)
+```
+
+```{r}
+TextDoc2014 <- Corpus(VectorSource(U2014))
+
+edit_text <- content_transformer(function (x , pattern ) gsub(pattern, " ", x))
+
+TextDoc2014 <- tm_map(TextDoc2014, edit_text, "/")
+TextDoc2014 <- tm_map(TextDoc2014, edit_text, "@")
+TextDoc2014 <- tm_map(TextDoc2014, edit_text, "\\|")
+TextDoc2014 <- tm_map(TextDoc2014, content_transformer(tolower))
+TextDoc2014 <- tm_map(TextDoc2014, removeNumbers)
+TextDoc2014 <- tm_map(TextDoc2014, removeWords, stopwords("english"))
+TextDoc2014 <- tm_map(TextDoc2014, removePunctuation)
+TextDoc2014 <- tm_map(TextDoc2014, stripWhitespace)
+TextDoc2014 <- tm_map(TextDoc2014, stemDocument)
+
+head(TextDoc2014)
+TextDoc_dtm_2014 <- TermDocumentMatrix(TextDoc2014)
+
+TextDoc_dtm_2014 <- TermDocumentMatrix(TextDoc2014)
+dtm_m_2014 <- as.matrix(TextDoc_dtm_2014)
+
+# Sort by descearing value of frequency
+dtm_v_2014 <- sort(rowSums(dtm_m_2014),decreasing=TRUE)
+dtm_d_2014 <- data.frame(word = names(dtm_v_2014),freq=dtm_v_2014)
+# Display the top 5 most frequent words
+head(dtm_d_2014, 5)
+```
+
+```{r}
+TextDoc2016 <- Corpus(VectorSource(U2016))
+
+edit_text <- content_transformer(function (x , pattern ) gsub(pattern, " ", x))
+
+TextDoc2016 <- tm_map(TextDoc2016, edit_text, "/")
+TextDoc2016 <- tm_map(TextDoc2016, edit_text, "@")
+TextDoc2016 <- tm_map(TextDoc2016, edit_text, "\\|")
+TextDoc2016 <- tm_map(TextDoc2016, content_transformer(tolower))
+TextDoc2016 <- tm_map(TextDoc2016, removeNumbers)
+TextDoc2016 <- tm_map(TextDoc2016, removeWords, stopwords("english"))
+TextDoc2016 <- tm_map(TextDoc2016, removePunctuation)
+TextDoc2016 <- tm_map(TextDoc2016, stripWhitespace)
+TextDoc2016 <- tm_map(TextDoc2016, stemDocument)
+
+head(TextDoc2016)
+TextDoc_dtm_2016 <- TermDocumentMatrix(TextDoc2016)
+
+TextDoc_dtm_2016 <- TermDocumentMatrix(TextDoc2016)
+dtm_m_2016 <- as.matrix(TextDoc_dtm_2016)
+
+# Sort by descearing value of frequency
+dtm_v_2016 <- sort(rowSums(dtm_m_2016),decreasing=TRUE)
+dtm_d_2016 <- data.frame(word = names(dtm_v_2016),freq=dtm_v_2016)
+# Display the top 5 most frequent words
+head(dtm_d_2016, 5)
+```
+
+
+```{r}
+TextDoc2018 <- Corpus(VectorSource(U2018))
+
+edit_text <- content_transformer(function (x , pattern ) gsub(pattern, " ", x))
+
+TextDoc2018 <- tm_map(TextDoc2018, edit_text, "/")
+TextDoc2018 <- tm_map(TextDoc2018, edit_text, "@")
+TextDoc2018 <- tm_map(TextDoc2018, edit_text, "\\|")
+TextDoc2018 <- tm_map(TextDoc2018, content_transformer(tolower))
+TextDoc2018 <- tm_map(TextDoc2018, removeNumbers)
+TextDoc2018 <- tm_map(TextDoc2018, removeWords, stopwords("english"))
+TextDoc2018 <- tm_map(TextDoc2018, removePunctuation)
+TextDoc2018 <- tm_map(TextDoc2018, stripWhitespace)
+TextDoc2018 <- tm_map(TextDoc2018, stemDocument)
+
+head(TextDoc2018)
+TextDoc_dtm_2018 <- TermDocumentMatrix(TextDoc2018)
+
+TextDoc_dtm_2018 <- TermDocumentMatrix(TextDoc2018)
+dtm_m_2018 <- as.matrix(TextDoc_dtm_2018)
+
+# Sort by descearing value of frequency
+dtm_v_2018 <- sort(rowSums(dtm_m_2018),decreasing=TRUE)
+dtm_d_2018 <- data.frame(word = names(dtm_v_2018),freq=dtm_v_2018)
+# Display the top 5 most frequent words
+head(dtm_d_2018, 5)
+```
+
+```{r}
+TextDoc2020 <- Corpus(VectorSource(U2020))
+
+edit_text <- content_transformer(function (x , pattern ) gsub(pattern, " ", x))
+
+TextDoc2020 <- tm_map(TextDoc2020, edit_text, "/")
+TextDoc2020 <- tm_map(TextDoc2020, edit_text, "@")
+TextDoc2020 <- tm_map(TextDoc2020, edit_text, "\\|")
+TextDoc2020 <- tm_map(TextDoc2020, content_transformer(tolower))
+TextDoc2020 <- tm_map(TextDoc2020, removeNumbers)
+TextDoc2020 <- tm_map(TextDoc2020, removeWords, stopwords("english"))
+TextDoc2020 <- tm_map(TextDoc2020, removePunctuation)
+TextDoc2020 <- tm_map(TextDoc2020, stripWhitespace)
+TextDoc2020 <- tm_map(TextDoc2020, stemDocument)
+
+head(TextDoc2020)
+TextDoc_dtm_2020 <- TermDocumentMatrix(TextDoc2020)
+
+TextDoc_dtm_2020 <- TermDocumentMatrix(TextDoc2020)
+dtm_m_2020 <- as.matrix(TextDoc_dtm_2020)
+
+# Sort by descearing value of frequency
+dtm_v_2020 <- sort(rowSums(dtm_m_2020),decreasing=TRUE)
+dtm_d_2020 <- data.frame(word = names(dtm_v_2020),freq=dtm_v_2020)
+# Display the top 5 most frequent words
+head(dtm_d_2020, 5)
+```
+
+```{r}
+TextDoc2022 <- Corpus(VectorSource(U2022))
+
+edit_text <- content_transformer(function (x , pattern ) gsub(pattern, " ", x))
+
+TextDoc2022 <- tm_map(TextDoc2022, edit_text, "/")
+TextDoc2022 <- tm_map(TextDoc2022, edit_text, "@")
+TextDoc2022 <- tm_map(TextDoc2022, edit_text, "\\|")
+TextDoc2022 <- tm_map(TextDoc2022, content_transformer(tolower))
+TextDoc2022 <- tm_map(TextDoc2022, removeNumbers)
+TextDoc2022 <- tm_map(TextDoc2022, removeWords, stopwords("english"))
+TextDoc2022 <- tm_map(TextDoc2022, removePunctuation)
+TextDoc2022 <- tm_map(TextDoc2022, stripWhitespace)
+TextDoc2022 <- tm_map(TextDoc2022, stemDocument)
+
+head(TextDoc2022)
+TextDoc_dtm_2022 <- TermDocumentMatrix(TextDoc2022)
+
+TextDoc_dtm_2022 <- TermDocumentMatrix(TextDoc2022)
+dtm_m_2022 <- as.matrix(TextDoc_dtm_2022)
+
+# Sort by descearing value of frequency
+dtm_v_2022 <- sort(rowSums(dtm_m_2022),decreasing=TRUE)
+dtm_d_2022 <- data.frame(word = names(dtm_v_2022),freq=dtm_v_2022)
+# Display the top 5 most frequent words
+head(dtm_d_2022, 5)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
