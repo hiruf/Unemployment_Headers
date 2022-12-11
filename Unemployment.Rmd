@@ -4,26 +4,89 @@ output: html_document
 date: "2022-12-11"
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r, include = FALSE}
+library(knitr)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library("tm")
+library("SnowballC")
+library("wordcloud")
+library("RColorBrewer")
+library("syuzhet")
+library("gtrendsR")
+remotes::install_github("news-r/nytimes")
+library(jsonlite)
+library(stringr)
 ```
 
-## R Markdown
+## Data (This section describes the data sources and the data gathering process.)
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+```{r}
+nytime = function (keyword,year) {
+  searchQ = URLencode(keyword)
+  url = paste('http://api.nytimes.com/svc/search/v2/articlesearch.json?q=',searchQ,
+              '&begin_date=',year,'0101&end_date=',year,'1231&api-key=',api,sep="")
+ 
+  initialsearch = fromJSON(url,flatten = T)
+  maxPages = round((initialsearch$response$meta$hits / 10)-1)
+  
+ 
+  maxPages = ifelse(maxPages >= 10, 10, maxPages)
+  
+ 
+  df = data.frame(id=as.numeric(),created_time=character(),snippet=character(),
+                  headline=character())
+  
+ 
+  for(i in 0:maxPages){
+  
+    nytSearch = fromJSON(paste0(url, "&page=", i), flatten = T) 
+    temp = data.frame(id=1:nrow(nytSearch$response$docs),
+                      created_time = nytSearch$response$docs$pub_date,
+                      snippet = nytSearch$response$docs$snippet,
+                      headline = nytSearch$response$docs$headline.main)
+    df=rbind(df,temp)
+    Sys.sleep(5) 
+  }
+  return(df)
+}
 ```
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r, include = FALSE}
+api = "ZMG66AOpWqDJ5OqyK9GSZh4mSrWAyapR"
+NY2008 <- nytime('unemployment',2008)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r, include = FALSE}
+NY2010 <- nytime('unemployment',2010)
+```
+
+```{r, include = FALSE}
+NY2012 <- nytime('unemployment',2012)
+```
+
+```{r, include = FALSE}
+NY2014 <- nytime('unemployment',2014)
+```
+
+```{r, include = FALSE}
+NY2016 <- nytime('unemployment',2016)
+```
+
+```{r, include = FALSE}
+NY2018 <- nytime('unemployment',2018)
+```
+
+```{r, include = FALSE}
+NY2020 <- nytime('unemployment',2020)
+```
+
+```{r, include = FALSE}
+NY2022 <- nytime('unemployment',2022)
+```
+
+
+
+
