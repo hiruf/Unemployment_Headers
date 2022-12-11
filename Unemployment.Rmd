@@ -336,9 +336,146 @@ dtm_m_2022 <- as.matrix(TextDoc_dtm_2022)
 dtm_v_2022 <- sort(rowSums(dtm_m_2022),decreasing=TRUE)
 dtm_d_2022 <- data.frame(word = names(dtm_v_2022),freq=dtm_v_2022)
 # Display the top 5 most frequent words
-head(dtm_d_2022, 5)
+plot(dtm_d_2022$word, dtm_m_2018$freq)
+head(dtm_d_2022)
+dtm_d_2022
+barplot(dtm_d_2022[1:5,]$freq, las = 2, names.arg = dtm_d_2022[1:5,]$word,
+        col ="lightgreen", main ="Top 5 most frequent words",
+        ylab = "Word frequencies")
 ```
 
+
+
+```{r}
+dtm_d_2008$word.f <-as.factor(dtm_d_2008$word)
+top2008<-dtm_d_2008%>%
+  slice(1:6)
+
+plot_08<-ggplot(data= top2008,aes(word.f, freq,fill=freq)) +    
+  geom_bar(stat="identity",   
+           position=position_dodge(),) +
+  theme_bw() +
+  theme(legend.position = "none") +
+  ggtitle("Top Frequented Words in NYT Articles \n Regarding Unemployment in 2008")+
+  xlab("Word")+ ylab("Frequency")+
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+```{r}
+dtm_d_2010$word.f <-as.factor(dtm_d_2010$word)
+top2010<-dtm_d_2010%>%
+  slice(1:6)
+
+plot_10<-ggplot(data= top2010,aes(word.f, freq,fill=freq)) +    
+  geom_bar(stat="identity",   
+           position=position_dodge(),) +
+  theme_bw() +
+  theme(legend.position = "none") +
+  ggtitle("Top Frequented Words in NYT Articles \n Regarding Unemployment in 2010")+
+  xlab("Word")+ ylab("Frequency")+
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+```{r}
+dtm_d_2012$word.f <-as.factor(dtm_d_2012$word)
+top2012<-dtm_d_2012%>%
+  slice(1:6)
+
+plot_12<-ggplot(data= top2012,aes(word.f, freq,fill=freq)) +    
+  geom_bar(stat="identity",   
+           position=position_dodge(),) +
+  theme_bw() +
+  theme(legend.position = "none") +
+  ggtitle("Top Frequented Words in NYT Articles \n Regarding Unemployment in 2012")+
+  xlab("Word")+ ylab("Frequency")+
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+
+
+```{r}
+dtm_d_2014$word.f <-as.factor(dtm_d_2014$word)
+top2014<-dtm_d_2014%>%
+  slice(1:6)
+
+plot_14<-ggplot(data= top2014,aes(word.f, freq,fill=freq)) +    
+  geom_bar(stat="identity",   
+           position=position_dodge(),) +
+  theme_bw() +
+  theme(legend.position = "none") +
+  ggtitle("Top Frequented Words in NYT Articles \n Regarding Unemployment in 2014")+
+  xlab("Word")+ ylab("Frequency")+
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+
+```{r}
+dtm_d_2016$word.f <-as.factor(dtm_d_2016$word)
+top2016<-dtm_d_2016%>%
+  slice(1:6)
+
+plot_16<-ggplot(data= top2016,aes(word.f, freq,fill=freq)) +    
+  geom_bar(stat="identity",   
+           position=position_dodge(),) +
+  theme_bw() +
+  theme(legend.position = "none") +
+  ggtitle("Top Frequented Words in NYT Articles \n Regarding Unemployment in 2016")+
+  xlab("Word")+ ylab("Frequency")+
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+
+```{r}
+dtm_d_2018$word.f <-as.factor(dtm_d_2018$word)
+top2018<-dtm_d_2018%>%
+  slice(1:6)
+
+plot_18<-ggplot(data= top2018,aes(word.f, freq,fill=freq)) +    
+  geom_bar(stat="identity",   
+           position=position_dodge(),) +
+  theme_bw() +
+  theme(legend.position = "none") +
+  ggtitle("Top Frequented Words in NYT Articles \n Regarding Unemployment in 2018")+
+  xlab("Word")+ ylab("Frequency")+
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+
+```{r}
+dtm_d_2020$word.f <-as.factor(dtm_d_2020$word)
+top2020<-dtm_d_2020%>%
+  slice(1:6)
+
+plot_20<-ggplot(data= top2020,aes(word.f, freq,fill=freq)) +    
+  geom_bar(stat="identity",   
+           position=position_dodge(),) +
+  theme_bw() +
+  theme(legend.position = "none") +
+  ggtitle("Top Frequented Words in NYT Articles \n Regarding Unemployment in 2020")+
+  xlab("Word")+ ylab("Frequency")+
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+
+```{r}
+dtm_d_2022$word.f <-as.factor(dtm_d_2022$word)
+top2022<-dtm_d_2022%>%
+  slice(1:6)
+
+plot_22<-ggplot(data= top2022,aes(word.f, freq,fill=freq)) +    
+  geom_bar(stat="identity",   
+           position=position_dodge(),) +
+  theme_bw() +
+  theme(legend.position = "none") +
+  ggtitle("Top Frequented Words in NYT Articles \n Regarding Unemployment in 2022")+
+  xlab("Word")+ ylab("Frequency")+
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+```{r fig.width=20, fig.height=10}
+library(ggpubr)
+ggarrange(plot_08,plot_10,plot_12,plot_14,plot_16,plot_18,plot_20,plot_22)
+```
 
 
 
