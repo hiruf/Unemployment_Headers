@@ -581,13 +581,23 @@ word_benefit<-filter(total, word.f=="benefit")
 word_benefit$Year<-as.numeric(word_benefit$Year)
 word_benefit
 
+word_rate<-filter(total, word.f=="rate")
+word_rate$Year<-as.numeric(word_rate$Year)
+word_rate
+
+word_r<-filter(total, word.f=="unemploy"|word.f=="unemployment")
+word_r$Year<-as.numeric(word_r$Year)
+word_r
+
 word_econ
 Complete.ts.plot <- ggplot()+
   geom_line(data=word_econ, aes(x=Year, y=freq), color='blue')+
   geom_line(data=word_benefit, aes(x=Year, y=freq), color='green')+
-  ggtitle("Total Number of Offenses Over Time")+
-  xlab("Month")+
-  ylab("Number of Offenses")+
+  geom_line(data=word_rate, aes(x=Year, y=freq), color='pink')+
+  geom_line(data=word_r, aes(x=Year, y=freq), color='black')+
+  ggtitle("Frequency of NYT Words")+
+  xlab("Year")+
+  ylab("Frequency")+
   theme(plot.title = element_text(hjust = 0.5))
 
 Complete.ts.plot
