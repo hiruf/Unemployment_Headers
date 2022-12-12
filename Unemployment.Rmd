@@ -565,12 +565,6 @@ top16
 top18
 top20
 top22
-#jobless
-#benefit
-#economi
-#rate
-
-
 
 word_econ<-filter(total, word.f=="economi")
 word_econ$Year<-as.numeric(word_econ$Year)
@@ -597,7 +591,7 @@ Complete.ts.plot <- ggplot()+
   geom_line(data=word_r, aes(x=Year, y=freq), color='black')+
   ggtitle("Frequency of NYT Words")+
   xlab("Year")+
-  ylab("Frequency")+
+  ylab("Freq")+
   theme(plot.title = element_text(hjust = 0.5))
 
 Complete.ts.plot
@@ -610,6 +604,26 @@ Complete.ts.plot
 * Unemployment Benefits
 
 
+```{r}
+econ_08.1 <- gtrends(keyword="economy", time="2008-01-01 2022-12-11",geo="US")
+
+econ_08<-as.data.frame(econ_08.1$interest_over_time)
+library(lubridate)
+econ_08$year <- year(ymd(econ_08$date))
+econ_08$month <- month(ymd(econ_08$date)) 
+econ_08$day <- day(ymd(econ_08$date))
+
+econ_08
+
+unemp <- gtrends(keyword="Unemployment", time="2008-01-01 2022-12-11",geo="US")
+
+unemp<-as.data.frame(unemp$interest_over_time)
+unemp$year <- year(ymd(unemp$date))
+unemp$month <- month(ymd(unemp$date)) 
+unemp$day <- day(ymd(unemp$date))
+
+unemp
+```
 
 
 
