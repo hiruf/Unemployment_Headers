@@ -22,6 +22,7 @@ library(jsonlite)
 library(stringr)
 library(tidytext)
 library(textdata)
+library(ggpubr)
 ```
 
 ## Introduction
@@ -412,7 +413,7 @@ From this chart, I could see one of the limitations to this project. Similar wor
 plot_08
 ```
 
-```{r}
+```{r, include = FALSE}
 head(dtm_d_2010)
 dtm_d_2010$word.f <-as.factor(dtm_d_2010$word)
 top2010<-dtm_d_2010%>%
@@ -429,8 +430,13 @@ plot_10<-ggplot(data= top2010,aes(word.f, freq,fill=freq)) +
 
 plot_10
 ```
-
+### 2010
+The top frequented words for NYT articles in 2010 is economi, jobless, new, Obama, rate, and recess. The word "Obama" was the most interesting to see as the word was not a top frequenter in 2008. Most likely due to Obama being elected into office in 2008. The jobless, rate, new and economi are still top frequenters.
 ```{r}
+plot_10
+```
+
+```{r, include=FALSE}
 head(dtm_d_2012)
 dtm_d_2012$word.f <-as.factor(dtm_d_2012$word)
 top2012<-dtm_d_2012%>%
@@ -446,6 +452,12 @@ plot_12<-ggplot(data= top2012,aes(word.f, freq,fill=freq)) +
   theme(plot.title = element_text(hjust = 0.5))
 ```
 
+### 2012
+
+Not much is different between 2012 and the previous years. There are less articles using the word "jobless" than before. 
+```{r}
+plot_12
+```
 
 
 ```{r, include = FALSE}
@@ -464,8 +476,14 @@ plot_14<-ggplot(data= top2014,aes(word.f, freq,fill=freq)) +
   theme(plot.title = element_text(hjust = 0.5))
 ```
 
-
+### 2014
+In 2014, the top word in articles regarding unemployment is the word "rate" and is higher in frequency than in past years.
 ```{r}
+plot_14
+```
+
+### 2016
+```{r, include = FALSE}
 head(dtm_d_2016)
 dtm_d_2016$word.f <-as.factor(dtm_d_2016$word)
 top2016<-dtm_d_2016%>%
@@ -481,8 +499,13 @@ plot_16<-ggplot(data= top2016,aes(word.f, freq,fill=freq)) +
   theme(plot.title = element_text(hjust = 0.5))
 ```
 
-
+In 2016, there is a high frequency of articles including economy. One of the reasons for increase in articles revolving economy could be due to Former President Trump being elected into office. 
 ```{r}
+plot_16
+```
+
+### 2018
+```{r, include= FALSE}
 head(dtm_d_2018)
 dtm_d_2018$word.f <-as.factor(dtm_d_2018$word)
 top2018<-dtm_d_2018%>%
@@ -497,9 +520,12 @@ plot_18<-ggplot(data= top2018,aes(word.f, freq,fill=freq)) +
   xlab("Word")+ ylab("Frequency")+
   theme(plot.title = element_text(hjust = 0.5))
 ```
-
-
+In 2018, the articles including unemployment and economy is higher than previous years including 2016. Business is also a top word that has not appeared in the top in past years. 
 ```{r}
+plot_18
+```
+### 2020
+```{r, include=FALSE}
 head(dtm_d_2020)
 dtm_d_2020$word.f <-as.factor(dtm_d_2020$word)
 top2020<-dtm_d_2020%>%
@@ -514,9 +540,13 @@ plot_20<-ggplot(data= top2020,aes(word.f, freq,fill=freq)) +
   xlab("Word")+ ylab("Frequency")+
   theme(plot.title = element_text(hjust = 0.5))
 ```
-
-
+One of the top words for this year is pandemic as COVID-19 led to shut downs and job loss concerns. People began turning to benefits due to unemployment and shut downs that forced many to stay at home. 
 ```{r}
+plot_20
+```
+### 2022
+
+```{r, include= FALSE}
 head(dtm_d_2022)
 dtm_d_2022$word.f <-as.factor(dtm_d_2022$word)
 top2022<-dtm_d_2022%>%
@@ -531,9 +561,13 @@ plot_22<-ggplot(data= top2022,aes(word.f, freq,fill=freq)) +
   xlab("Word")+ ylab("Frequency")+
   theme(plot.title = element_text(hjust = 0.5))
 ```
+In 2022, economy is still an important word as well as rate. The word "inflation" is a top frequent word that has not appeared in previous years.  
+```{r}
+plot_22
+```
 
-```{r fig.width=20, fig.height=10}
-library(ggpubr)
+Below is a plot of all the bar charts combined. 
+```{r echo=FALSE ,fig.width=20, fig.height=10}
 ggarrange(plot_08,plot_10,plot_12,plot_14,plot_16,plot_18,plot_20,plot_22)
 ```
 
@@ -617,8 +651,11 @@ top16
 top18
 top20
 top22
-
-word_econ<-filter(total, word.f=="economi")
+```
+### Time Series Plot
+It would be interesting to see how top 
+```{r echo=FALSE}
+word_econ<-filter(total, word.f=="economi"|word.f=="economy")
 word_econ$Year<-as.numeric(word_econ$Year)
 word_econ
 
@@ -635,28 +672,29 @@ word_r<-filter(total, word.f=="unemploy"|word.f=="unemployment")
 word_r$Year<-as.numeric(word_r$Year)
 word_r
 
+
+
 word_econ
 Complete.ts.plot <- ggplot()+
-  geom_line(data=word_econ, aes(x=Year, y=freq), color='blue')+
+  geom_line(data=word_econ, aes(x=Year, y=freq), color="blue")+
   geom_line(data=word_benefit, aes(x=Year, y=freq), color='green')+
-  geom_line(data=word_rate, aes(x=Year, y=freq), color='pink')+
+  geom_line(data=word_rate, aes(x=Year, y=freq), color='purple')+
   geom_line(data=word_r, aes(x=Year, y=freq), color='black')+
   ggtitle("Frequency of NYT Words")+
   xlab("Year")+
   ylab("Freq")+
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5))+ 
+  theme_minimal() +
+     scale_color_manual(name = "Model fit",
+                        breaks = c("economy", "benefit", "rate","unemployment"),
+                        values = c("economy" = "blue", "benefit" = "green", "rate" = "purple", "unemployment"="black") ) # sadly the legend did not work
 
 Complete.ts.plot
 ```
 
 
-#Gtrends -
-
-* economy
-* Unemployment Benefits
-
-
-```{r}
+##Gtrends -
+```{r echo=FALSE}
 econ_08.1 <- gtrends(keyword="economy", time="2007-01-01 2022-12-11",geo="US")
 
 econ_08<-as.data.frame(econ_08.1$interest_over_time)
@@ -666,8 +704,6 @@ econ_08$month <- month(ymd(econ_08$date))
 econ_08$day <- day(ymd(econ_08$date))
 
 econ_08
-
-
 
 unemp <- gtrends(keyword="Unemployment", time="2007-01-01 2022-12-11",geo="US")
 
@@ -679,16 +715,39 @@ unemp$day <- day(ymd(unemp$date))
 unemp
 
 
+infla <- gtrends(keyword="inflation", time="2007-01-01 2022-12-11",geo="US")
+
+infla<-as.data.frame(infla$interest_over_time)
+infla$year <- year(ymd(infla$date))
+infla$month <- month(ymd(infla$date)) 
+infla$day <- day(ymd(infla$date))
+```
+There were some words that seemed to be interesting to examine. New York Times Articles were examined but the package gtrendsR allows users to find the number of hits for a keyword. The words "economy", "unemployment", and "inflation" were used as the keyword in the search query. The time frame for the graphs are from January 1, 2007 to December 11, 2022. 
+
+### Economy -- gtrendsR
+The number of hits regarding economy seems to hit 100, the highest searched, in 2008 to 2009. The number of hits since then has been steadily increasing and decreasing. 
+```{r echo=FALSE}
 ggplot(econ_08, aes(x=date, y=hits, group = 1)) +
   geom_line()+
   ggtitle("Number of Hits for Economy")+
   xlab("Year")+
   ylab("Hits")+
   theme(plot.title = element_text(hjust = 0.5))
+```
 
+```{r echo=FALSE}
 ggplot(unemp, aes(x=date, y=hits, group = 1)) +
   geom_line()+
   ggtitle("Number of Hits for Unemployment")+
+  xlab("Year")+
+  ylab("Hits")+
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+```{r echo=FALSE}
+ggplot(infla, aes(x=date, y=hits, group = 1)) +
+  geom_line()+
+  ggtitle("Number of Hits for Inflation")+
   xlab("Year")+
   ylab("Hits")+
   theme(plot.title = element_text(hjust = 0.5))
