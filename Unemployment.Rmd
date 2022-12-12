@@ -2,6 +2,8 @@
 title: "Untitled"
 output: html_document
 date: "2022-12-11"
+bibliography: citations.bib
+
 ---
 
 ```{r, include = FALSE}
@@ -22,11 +24,20 @@ library(tidytext)
 library(textdata)
 ```
 
-## Data (This section describes the data sources and the data gathering process.)
+## Introduction
+
+  This project examines headlines and snippets regarding unemployment, specifically, headlines from the New York Times. Starting from 2008, the middle of a recession, to present day, the headlines and snippets will be analyzed to see the commonly frequented words and how they have changed throughout the years. The keywords in the headers may also highlight other concerns that Americans have that is not related to healthcare. Therefore, this project will answer the following questions :
+  1. How has the wording in headlines and snippets changed regarding unemployment from 2008 to 2022?
+  2. Can headline and snippet wording regarding unemployment shed light into other concerns that Americans may have?
 
 ### Data Collection
 
-```{r}
+The New York Times API will be used to collect headlines for the specific time range regarding unemployment. This sample of code. An RPubs tutorial released aided in collecting the data as the author, Vicentwx, went through the article search function and the text cleaning [@vincentwx_2019].
+
+
+
+
+```{r include = FALSE}
 nytime = function (keyword,year) {
   searchQ = URLencode(keyword)
   url = paste('http://api.nytimes.com/svc/search/v2/articlesearch.json?q=',searchQ,
@@ -94,7 +105,20 @@ NY2020 <- nytime('unemployment',2020)
 NY2022 <- nytime('unemployment',2022)
 ```
 
+```{r include = FALSE}
+write.csv(NY2022, "C:\\Users\\tutu\\Downloads\\NY2022.csv")
+write.csv(NY2020, "C:\\Users\\tutu\\Downloads\\NY2020.csv")
+write.csv(NY2018, "C:\\Users\\tutu\\Downloads\\NY2018.csv")
+write.csv(NY2016, "C:\\Users\\tutu\\Downloads\\NY2016.csv")
+write.csv(NY2014, "C:\\Users\\tutu\\Downloads\\NY2014.csv")
+write.csv(NY2012, "C:\\Users\\tutu\\Downloads\\NY2012.csv")
+write.csv(NY2010, "C:\\Users\\tutu\\Downloads\\NY20110.csv")
+write.csv(NY2008, "C:\\Users\\tutu\\Downloads\\NY2008.csv")
+```
+
+
 ### Cleaning and Preparing the Data
+For the cleaning and preparation, the data cleaning process by Vicentwx [@vincentwx_2019] was a very detailed guide in removing all unnecessary punctuation, words and white spaces. An example of one of the punctuation removal is below:
 
 ```{r, include = FALSE}
 # Adding the appropriate year to the data
@@ -116,7 +140,7 @@ U2022<-data.frame(append(NY2022, c(Year='2022'), after=1))
 ```
 
 
-```{r}
+```{r, include = FALSE}
 TextDoc2008 <- Corpus(VectorSource(U2008))
 
 edit_text <- content_transformer(function (x , pattern ) gsub(pattern, " ", x))
@@ -136,15 +160,28 @@ TextDoc_dtm_2008 <- TermDocumentMatrix(TextDoc2008)
 
 TextDoc_dtm_2008 <- TermDocumentMatrix(TextDoc2008)
 dtm_m_2008 <- as.matrix(TextDoc_dtm_2008)
-
-# Sort by descearing value of frequency
-dtm_v_2008 <- sort(rowSums(dtm_m_2008),decreasing=TRUE)
-dtm_d_2008 <- data.frame(word = names(dtm_v_2008),freq=dtm_v_2008)
-# Display the top 5 most frequent words
-head(dtm_d_2008, 5)
 ```
 
+
+```{r, include = FALSE}
+dtm_v_2008 <- sort(rowSums(dtm_m_2008),decreasing=TRUE)
+dtm_d_2008 <- data.frame(word = names(dtm_v_2008),freq=dtm_v_2008)
+
+```
+
+Below is a table that shows the top 5 words for articles regarding unemployment in the headlines and snippets. Later on, I have decided to not include the word "unemployment" and "jobs" in some of the data analysis to ensure that other words are examined more. 
+
 ```{r}
+library(gt)
+head(dtm_d_2008, 5)
+
+dtm_d_2008%>%
+  head(5)%>%
+  gt()%>%
+  tab_header(title="2008 Top Words")
+```
+
+```{r, include = FALSE}
 TextDoc2010 <- Corpus(VectorSource(U2010))
 
 edit_text <- content_transformer(function (x , pattern ) gsub(pattern, " ", x))
@@ -172,7 +209,7 @@ dtm_d_2010 <- data.frame(word = names(dtm_v_2010),freq=dtm_v_2010)
 head(dtm_d_2010, 5)
 ```
 
-```{r}
+```{r, include = FALSE}
 TextDoc2012 <- Corpus(VectorSource(U2012))
 
 edit_text <- content_transformer(function (x , pattern ) gsub(pattern, " ", x))
@@ -200,7 +237,7 @@ dtm_d_2012 <- data.frame(word = names(dtm_v_2012),freq=dtm_v_2012)
 head(dtm_d_2012, 5)
 ```
 
-```{r}
+```{r, include = FALSE}
 TextDoc2014 <- Corpus(VectorSource(U2014))
 
 edit_text <- content_transformer(function (x , pattern ) gsub(pattern, " ", x))
@@ -228,7 +265,7 @@ dtm_d_2014 <- data.frame(word = names(dtm_v_2014),freq=dtm_v_2014)
 head(dtm_d_2014, 5)
 ```
 
-```{r}
+```{r, include = FALSE}
 TextDoc2016 <- Corpus(VectorSource(U2016))
 
 edit_text <- content_transformer(function (x , pattern ) gsub(pattern, " ", x))
@@ -257,7 +294,7 @@ head(dtm_d_2016, 5)
 ```
 
 
-```{r}
+```{r, include = FALSE}
 TextDoc2018 <- Corpus(VectorSource(U2018))
 
 edit_text <- content_transformer(function (x , pattern ) gsub(pattern, " ", x))
@@ -285,7 +322,7 @@ dtm_d_2018 <- data.frame(word = names(dtm_v_2018),freq=dtm_v_2018)
 head(dtm_d_2018, 5)
 ```
 
-```{r}
+```{r, include = FALSE}
 TextDoc2020 <- Corpus(VectorSource(U2020))
 
 edit_text <- content_transformer(function (x , pattern ) gsub(pattern, " ", x))
@@ -313,7 +350,7 @@ dtm_d_2020 <- data.frame(word = names(dtm_v_2020),freq=dtm_v_2020)
 head(dtm_d_2020, 5)
 ```
 
-```{r}
+```{r, include = FALSE}
 TextDoc2022 <- Corpus(VectorSource(U2022))
 
 edit_text <- content_transformer(function (x , pattern ) gsub(pattern, " ", x))
@@ -346,9 +383,10 @@ barplot(dtm_d_2022[1:5,]$freq, las = 2, names.arg = dtm_d_2022[1:5,]$word,
         ylab = "Word frequencies")
 ```
 
+### Explanatory Analysis
+After the data cleaning and preparing is complete, bar charts are made to look at the data. I have removed common words such as "employment" as mentioned before. It is common for articles to include those words since it is a a keyword that was used to search for the articles. Therefore, we want to examine other words that may give insight on the employment issues, concerns, and general ideas each specific year. 
 
-
-```{r}
+```{r, include = FALSE}
 head(dtm_d_2008)
 dtm_d_2008$word.f <-as.factor(dtm_d_2008$word)
 top2008<-dtm_d_2008%>%
@@ -362,6 +400,16 @@ plot_08<-ggplot(data= top2008,aes(word.f, freq,fill=freq)) +
   ggtitle("Top Frequented Words in NYT Articles \n Regarding Unemployment in 2008")+
   xlab("Word")+ ylab("Frequency")+
   theme(plot.title = element_text(hjust = 0.5))
+```
+
+### 2008
+
+The top words in the 2008 headlines and snippets are economic, economy, jobless, jobs, new, rate, and york.
+
+From this chart, I could see one of the limitations to this project. Similar words such as economy and economic should have been combined together so that their counts could have been added together. Another limitation is the inability to tell if the word "new" and "york" has articles focusing on the city New York or if the articles are mentioning the New York Times. In a future analysis, the word "New York Times" may be omitted. 
+
+```{r}
+plot_08
 ```
 
 ```{r}
@@ -378,6 +426,8 @@ plot_10<-ggplot(data= top2010,aes(word.f, freq,fill=freq)) +
   ggtitle("Top Frequented Words in NYT Articles \n Regarding Unemployment in 2010")+
   xlab("Word")+ ylab("Frequency")+
   theme(plot.title = element_text(hjust = 0.5))
+
+plot_10
 ```
 
 ```{r}
@@ -398,7 +448,7 @@ plot_12<-ggplot(data= top2012,aes(word.f, freq,fill=freq)) +
 
 
 
-```{r}
+```{r, include = FALSE}
 head(dtm_d_2014)
 dtm_d_2014$word.f <-as.factor(dtm_d_2014$word)
 top2014<-dtm_d_2014%>%
