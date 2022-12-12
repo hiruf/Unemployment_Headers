@@ -18,6 +18,8 @@ library("gtrendsR")
 remotes::install_github("news-r/nytimes")
 library(jsonlite)
 library(stringr)
+library(tidytext)
+library(textdata)
 ```
 
 ## Data (This section describes the data sources and the data gathering process.)
@@ -605,7 +607,7 @@ Complete.ts.plot
 
 
 ```{r}
-econ_08.1 <- gtrends(keyword="economy", time="2008-01-01 2022-12-11",geo="US")
+econ_08.1 <- gtrends(keyword="economy", time="2007-01-01 2022-12-11",geo="US")
 
 econ_08<-as.data.frame(econ_08.1$interest_over_time)
 library(lubridate)
@@ -615,7 +617,9 @@ econ_08$day <- day(ymd(econ_08$date))
 
 econ_08
 
-unemp <- gtrends(keyword="Unemployment", time="2008-01-01 2022-12-11",geo="US")
+
+
+unemp <- gtrends(keyword="Unemployment", time="2007-01-01 2022-12-11",geo="US")
 
 unemp<-as.data.frame(unemp$interest_over_time)
 unemp$year <- year(ymd(unemp$date))
@@ -623,12 +627,278 @@ unemp$month <- month(ymd(unemp$date))
 unemp$day <- day(ymd(unemp$date))
 
 unemp
+
+
+ggplot(econ_08, aes(x=date, y=hits, group = 1)) +
+  geom_line()+
+  ggtitle("Number of Hits for Economy")+
+  xlab("Year")+
+  ylab("Hits")+
+  theme(plot.title = element_text(hjust = 0.5))
+
+ggplot(unemp, aes(x=date, y=hits, group = 1)) +
+  geom_line()+
+  ggtitle("Number of Hits for Unemployment")+
+  xlab("Year")+
+  ylab("Hits")+
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+### Sentiment Analysis
+```{r}
+senti_08<-dtm_d_2008 %>%
+  dplyr::mutate(words = n()) %>%
+  dplyr::left_join(tidytext::get_sentiments("nrc")) %>%
+  dplyr::mutate(word = factor(word),
+         sentiment = factor(sentiment))
+
+senti_08<-senti_08 %>%
+  dplyr::group_by(sentiment) %>%
+  dplyr::summarise(sentiment = unique(sentiment),
+                   sentiment_freq = n(),
+                   words = unique(words)) %>%
+  dplyr::filter(is.na(sentiment) == F) %>%
+  dplyr::mutate(percentage = round(sentiment_freq/words*100, 1))
+  
+plot_sent_2008<- senti_08 %>%
+  dplyr::filter(sentiment != "positive",
+         sentiment != "negative") %>%
+  ggplot(aes(sentiment, percentage,fill=sentiment)) +    
+  geom_bar(stat="identity",   
+           position=position_dodge()) +
+  theme_bw() +
+  theme(legend.position = "none") +
+  ggtitle("Sentiment Analysis of 2008 NYT Articles")+
+  xlab("Sentiment")+
+  ylab("Percentage")+
+  theme(plot.title = element_text(hjust = 0.5)) 
+
+plot_sent_2008
 ```
 
 
 
+```{r}
+senti_10<-dtm_d_2010 %>%
+  dplyr::mutate(words = n()) %>%
+  dplyr::left_join(tidytext::get_sentiments("nrc")) %>%
+  dplyr::mutate(word = factor(word),
+         sentiment = factor(sentiment))
+
+senti_10<-senti_10 %>%
+  dplyr::group_by(sentiment) %>%
+  dplyr::summarise(sentiment = unique(sentiment),
+                   sentiment_freq = n(),
+                   words = unique(words)) %>%
+  dplyr::filter(is.na(sentiment) == F) %>%
+  dplyr::mutate(percentage = round(sentiment_freq/words*100, 1))
+  
+plot_sent_2010<- senti_10 %>%
+  dplyr::filter(sentiment != "positive",
+         sentiment != "negative") %>%
+  ggplot(aes(sentiment, percentage,fill=sentiment)) +    
+  geom_bar(stat="identity",   
+           position=position_dodge()) +
+  theme_bw() +
+  theme(legend.position = "none") +
+  ggtitle("Sentiment Analysis of 2010 NYT Articles")+
+  xlab("Sentiment")+
+  ylab("Percentage")+
+  theme(plot.title = element_text(hjust = 0.5)) 
+
+plot_sent_2010
+```
+
+```{r}
+senti_12<-dtm_d_2012 %>%
+  dplyr::mutate(words = n()) %>%
+  dplyr::left_join(tidytext::get_sentiments("nrc")) %>%
+  dplyr::mutate(word = factor(word),
+         sentiment = factor(sentiment))
+
+senti_12<-senti_12 %>%
+  dplyr::group_by(sentiment) %>%
+  dplyr::summarise(sentiment = unique(sentiment),
+                   sentiment_freq = n(),
+                   words = unique(words)) %>%
+  dplyr::filter(is.na(sentiment) == F) %>%
+  dplyr::mutate(percentage = round(sentiment_freq/words*100, 1))
+  
+plot_sent_2012<- senti_12 %>%
+  dplyr::filter(sentiment != "positive",
+         sentiment != "negative") %>%
+  ggplot(aes(sentiment, percentage,fill=sentiment)) +    
+  geom_bar(stat="identity",   
+           position=position_dodge()) +
+  theme_bw() +
+  theme(legend.position = "none") +
+  ggtitle("Sentiment Analysis of 2012 NYT Articles")+
+  xlab("Sentiment")+
+  ylab("Percentage")+
+  theme(plot.title = element_text(hjust = 0.5)) 
+
+plot_sent_2012
+```
+
+```{r}
+senti_14<-dtm_d_2014 %>%
+  dplyr::mutate(words = n()) %>%
+  dplyr::left_join(tidytext::get_sentiments("nrc")) %>%
+  dplyr::mutate(word = factor(word),
+         sentiment = factor(sentiment))
+
+senti_14<-senti_14 %>%
+  dplyr::group_by(sentiment) %>%
+  dplyr::summarise(sentiment = unique(sentiment),
+                   sentiment_freq = n(),
+                   words = unique(words)) %>%
+  dplyr::filter(is.na(sentiment) == F) %>%
+  dplyr::mutate(percentage = round(sentiment_freq/words*100, 1))
+  
+plot_sent_2014<- senti_14 %>%
+  dplyr::filter(sentiment != "positive",
+         sentiment != "negative") %>%
+  ggplot(aes(sentiment, percentage,fill=sentiment)) +    
+  geom_bar(stat="identity",   
+           position=position_dodge()) +
+  theme_bw() +
+  theme(legend.position = "none") +
+  ggtitle("Sentiment Analysis of 2014 NYT Articles")+
+  xlab("Sentiment")+
+  ylab("Percentage")+
+  theme(plot.title = element_text(hjust = 0.5)) 
+
+plot_sent_2014
+```
+
+```{r}
+senti_16<-dtm_d_2016 %>%
+  dplyr::mutate(words = n()) %>%
+  dplyr::left_join(tidytext::get_sentiments("nrc")) %>%
+  dplyr::mutate(word = factor(word),
+         sentiment = factor(sentiment))
+
+senti_16<-senti_16 %>%
+  dplyr::group_by(sentiment) %>%
+  dplyr::summarise(sentiment = unique(sentiment),
+                   sentiment_freq = n(),
+                   words = unique(words)) %>%
+  dplyr::filter(is.na(sentiment) == F) %>%
+  dplyr::mutate(percentage = round(sentiment_freq/words*100, 1))
+  
+plot_sent_2016<- senti_16 %>%
+  dplyr::filter(sentiment != "positive",
+         sentiment != "negative") %>%
+  ggplot(aes(sentiment, percentage,fill=sentiment)) +    
+  geom_bar(stat="identity",   
+           position=position_dodge()) +
+  theme_bw() +
+  theme(legend.position = "none") +
+  ggtitle("Sentiment Analysis of 2016 NYT Articles")+
+  xlab("Sentiment")+
+  ylab("Percentage")+
+  theme(plot.title = element_text(hjust = 0.5)) 
+
+plot_sent_2016
+```
+
+```{r}
+senti_18<-dtm_d_2018 %>%
+  dplyr::mutate(words = n()) %>%
+  dplyr::left_join(tidytext::get_sentiments("nrc")) %>%
+  dplyr::mutate(word = factor(word),
+         sentiment = factor(sentiment))
+
+senti_18<-senti_18 %>%
+  dplyr::group_by(sentiment) %>%
+  dplyr::summarise(sentiment = unique(sentiment),
+                   sentiment_freq = n(),
+                   words = unique(words)) %>%
+  dplyr::filter(is.na(sentiment) == F) %>%
+  dplyr::mutate(percentage = round(sentiment_freq/words*100, 1))
+  
+plot_sent_2018<- senti_18 %>%
+  dplyr::filter(sentiment != "positive",
+         sentiment != "negative") %>%
+  ggplot(aes(sentiment, percentage,fill=sentiment)) +    
+  geom_bar(stat="identity",   
+           position=position_dodge()) +
+  theme_bw() +
+  theme(legend.position = "none") +
+  ggtitle("Sentiment Analysis of 2018 NYT Articles")+
+  xlab("Sentiment")+
+  ylab("Percentage")+
+  theme(plot.title = element_text(hjust = 0.5)) 
+
+plot_sent_2018
+```
+
+```{r}
+senti_20<-dtm_d_2020 %>%
+  dplyr::mutate(words = n()) %>%
+  dplyr::left_join(tidytext::get_sentiments("nrc")) %>%
+  dplyr::mutate(word = factor(word),
+         sentiment = factor(sentiment))
+
+senti_20<-senti_20 %>%
+  dplyr::group_by(sentiment) %>%
+  dplyr::summarise(sentiment = unique(sentiment),
+                   sentiment_freq = n(),
+                   words = unique(words)) %>%
+  dplyr::filter(is.na(sentiment) == F) %>%
+  dplyr::mutate(percentage = round(sentiment_freq/words*100, 1))
+  
+plot_sent_2020<- senti_20 %>%
+  dplyr::filter(sentiment != "positive",
+         sentiment != "negative") %>%
+  ggplot(aes(sentiment, percentage,fill=sentiment)) +    
+  geom_bar(stat="identity",   
+           position=position_dodge()) +
+  theme_bw() +
+  theme(legend.position = "none") +
+  ggtitle("Sentiment Analysis of 2020 NYT Articles")+
+  xlab("Sentiment")+
+  ylab("Percentage")+
+  theme(plot.title = element_text(hjust = 0.5)) 
+
+plot_sent_2020
+```
+
+```{r}
+senti_22<-dtm_d_2022 %>%
+  dplyr::mutate(words = n()) %>%
+  dplyr::left_join(tidytext::get_sentiments("nrc")) %>%
+  dplyr::mutate(word = factor(word),
+         sentiment = factor(sentiment))
+
+senti_22<-senti_22 %>%
+  dplyr::group_by(sentiment) %>%
+  dplyr::summarise(sentiment = unique(sentiment),
+                   sentiment_freq = n(),
+                   words = unique(words)) %>%
+  dplyr::filter(is.na(sentiment) == F) %>%
+  dplyr::mutate(percentage = round(sentiment_freq/words*100, 1))
+  
+plot_sent_2022<- senti_22 %>%
+  dplyr::filter(sentiment != "positive",
+         sentiment != "negative") %>%
+  ggplot(aes(sentiment, percentage,fill=sentiment)) +    
+  geom_bar(stat="identity",   
+           position=position_dodge()) +
+  theme_bw() +
+  theme(legend.position = "none") +
+  ggtitle("Sentiment Analysis of 2022 NYT Articles")+
+  xlab("Sentiment")+
+  ylab("Percentage")+
+  theme(plot.title = element_text(hjust = 0.5)) 
+
+plot_sent_2022
+```
 
 
+```{r fig.width=20, fig.height=10}
+ggarrange(plot_sent_2008,plot_sent_2010,plot_sent_2012,plot_sent_2014,plot_sent_2016,plot_sent_2018,plot_sent_2020,plot_sent_2022)
+```
 
 
 
