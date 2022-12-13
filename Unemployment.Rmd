@@ -1039,8 +1039,15 @@ ggarrange(plot_sent_2008,plot_sent_2010,plot_sent_2012,plot_sent_2014,plot_sent_
 ## Discussion
 
 ## Key Take Aways Regarding Top Frequent Words
+After examining the top frequent words between 2008 and 2022, a few words reappeared in multiple years. Words like economy, rate, and jobless appeared in more than one year whereas there was also words that only appeared in one year. words like "Obama" or "Pandemic" were only top frequently written in that specific year.
+
+The following questions were asked in the beginning of this project:
+  1. How has the wording in headlines and snippets changed regarding unemployment from 2008 to 2022?
+      * The wording in the headlines and snippets frequently have the same words such as "economy", "rate", and "joblesS"
+  2. Can headline and snippet wording regarding unemployment shed light into other concerns that Americans may have?
 
 ## Key Take Aways Regarding gTrendsR
+gTrends was used find the number of hits for Google Searches for specific keywords
 
 ## Key Take Aways Regarding Sentiment Analysis
 
@@ -1049,8 +1056,10 @@ ggarrange(plot_sent_2008,plot_sent_2010,plot_sent_2012,plot_sent_2014,plot_sent_
 ### Limitations
 
 ### What Could Have Been Done Better
+The data cleaning aspect could have been done better. Many of the words repeatedly appeared in the top frequent word portion. These word duplicates made the plots confusing as the same words appeared more than once. 
 
 ### How Could This Project Be Expanded
+This project could be expanded by examining real unemployment, unemployment benefit, and inflation data.
 
 ## References
 
