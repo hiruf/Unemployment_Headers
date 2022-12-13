@@ -24,18 +24,12 @@ library(ggpubr)
 ```
 
 ## Introduction
-
-  This project examines headlines and snippets regarding unemployment, specifically, headlines from the New York Times. Starting from 2008, the middle of a recession, to present day, the headlines and snippets will be analyzed to see the commonly frequented words and how they have changed throughout the years. The keywords in the headers may also highlight other concerns that Americans have that is not related to healthcare. Therefore, this project will answer the following questions :
+  This project examines headlines and snippets regarding unemployment. Articles from The New York Times are collected from The New York Times API, starting from 2008, the middle of a recession, to the present day. The headlines and snippets are analyzed to find the most frequented words and how the text has changed throughout the years. The keywords in the articles may also highlight other concerns that Americans have that are not related to unemployment, such as inflation. Therefore, this project will answer the following questions :
   1. How has the wording in headlines and snippets changed regarding unemployment from 2008 to 2022?
-  2. Can headline and snippet wording regarding unemployment shed light into other concerns that Americans may have?
-
+  2. Can headline and snippet wording regarding unemployment shed light on other concerns Americans may have?
+  
 ### Data Collection
-
-The New York Times API will be used to collect headlines for the specific time range regarding unemployment. This sample of code. An RPubs tutorial released aided in collecting the data as the author, Vicentwx, went through the article search function and the text cleaning [@vincentwx_2019].
-
-
-
-
+The New York Times API has many unique features. One of the features is the ability to find articles using a specific keyword and year. For this project, I queried the word "unemployment" from every other year between 2008 to 2022. After querying, the result will be a snippet and headline character variable for each year specified. An RPubs tutorial released by Vicentwx aided in collecting the data as they have written an extensive article outlining how to use The New York Times article search feature and how to clean the data [@vincentwx_2019].
 ```{r include = FALSE}
 nytime = function (keyword,year) {
   searchQ = URLencode(keyword)
@@ -67,15 +61,11 @@ nytime = function (keyword,year) {
 }
 ```
 
-
 ```{r, include = FALSE}
-
 # These are all in seperate code chunks that the API does not get overwhelmed.
-
 api = "ZMG66AOpWqDJ5OqyK9GSZh4mSrWAyapR"
 NY2008 <- nytime('unemployment',2008)
 ```
-
 ```{r, include = FALSE}
 NY2010 <- nytime('unemployment',2010)
 ```
@@ -111,13 +101,12 @@ write.csv(NY2018, "C:\\Users\\tutu\\Downloads\\NY2018.csv")
 write.csv(NY2016, "C:\\Users\\tutu\\Downloads\\NY2016.csv")
 write.csv(NY2014, "C:\\Users\\tutu\\Downloads\\NY2014.csv")
 write.csv(NY2012, "C:\\Users\\tutu\\Downloads\\NY2012.csv")
-write.csv(NY2010, "C:\\Users\\tutu\\Downloads\\NY20110.csv")
+write.csv(NY2010, "C:\\Users\\tutu\\Downloads\\NY2010.csv")
 write.csv(NY2008, "C:\\Users\\tutu\\Downloads\\NY2008.csv")
 ```
 
-
 ### Cleaning and Preparing the Data
-For the cleaning and preparation, the data cleaning process by Vicentwx [@vincentwx_2019] was a very detailed guide in removing all unnecessary punctuation, words and white spaces. An example of one of the punctuation removal is below:
+As mentioned in the prior section, Vicentwx's extensive tutorial on The New York Times article search feature was used to aid in the cleaning and preparation of the data. Each year was made into a corpus which was then removed of all punctuation, white space, and numbers. Afterward, the corpus was made into a term document matrix. This process was repeated for each year from 2008 to 2022. [@vincentwx_2019]
 
 ```{r, include = FALSE}
 # Adding the appropriate year to the data
@@ -167,9 +156,7 @@ dtm_v_2008 <- sort(rowSums(dtm_m_2008),decreasing=TRUE)
 dtm_d_2008 <- data.frame(word = names(dtm_v_2008),freq=dtm_v_2008)
 
 ```
-
-Below is a table that shows the top 5 words for articles regarding unemployment in the headlines and snippets. Later on, I have decided to not include the word "unemployment" and "jobs" in some of the data analysis to ensure that other words are examined more. 
-
+After the cleaning and the preparation, the data is ready to be used for analysis. Below is a table of the 2008 top frequented words in the article sample that was collected. 
 ```{r}
 library(gt)
 head(dtm_d_2008, 5)
@@ -374,16 +361,15 @@ dtm_m_2022 <- as.matrix(TextDoc_dtm_2022)
 dtm_v_2022 <- sort(rowSums(dtm_m_2022),decreasing=TRUE)
 dtm_d_2022 <- data.frame(word = names(dtm_v_2022),freq=dtm_v_2022)
 # Display the top 5 most frequent words
-plot(dtm_d_2022$word, dtm_m_2018$freq)
+
 head(dtm_d_2022)
 dtm_d_2022
-barplot(dtm_d_2022[1:5,]$freq, las = 2, names.arg = dtm_d_2022[1:5,]$word,
-        col ="lightgreen", main ="Top 5 most frequent words",
-        ylab = "Word frequencies")
 ```
 
 ### Explanatory Analysis
-After the data cleaning and preparing is complete, bar charts are made to look at the data. I have removed common words such as "employment" as mentioned before. It is common for articles to include those words since it is a a keyword that was used to search for the articles. Therefore, we want to examine other words that may give insight on the employment issues, concerns, and general ideas each specific year. 
+For the first part of the analysis, "unemployment" must be removed from the sample. It is a common word that appears often in the sample since the word used to query  was "unemployment". 
+
+Barplots will be used to compare the top frequently appearing words in the article sample. Each article has the same Y limit (0,45) to make graph comparison easier in first glance. The word with the highest frequency is also highlighted in blue to aid in identification of the top frequented word. 
 
 ```{r, include = FALSE}
 head(dtm_d_2008)
@@ -404,9 +390,7 @@ plot_08<-ggplot(data= top2008,aes(word.f, freq,fill=freq)) +
 
 ### 2008
 
-The top words in the 2008 headlines and snippets are economic, economy, jobless, jobs, new, rate, and york.
-
-From this chart, I could see one of the limitations to this project. Similar words such as economy and economic should have been combined together so that their counts could have been added together. Another limitation is the inability to tell if the word "new" and "york" has articles focusing on the city New York or if the articles are mentioning the New York Times. In a future analysis, the word "New York Times" may be omitted. 
+The 2008 plot indicates some of the errors in the data collection and data preparation portion. Some of the words are similar such as economic and economy. Despite not being the same word, "economic"  and "economy" could have been grouped. Additionally, the plot has "new" and "york" as the top words. There is a strong possibility that these two words are top frequenters as the newspaper is The New York Times. In a future analysis, the words "new" and "york" may have to be omitted from the sample. Sadly due to time constraints, I was unable to fix these errors. 
 
 ```{r}
 plot_08
@@ -431,7 +415,7 @@ plot_10<-ggplot(data= top2010,aes(word.f, freq,fill=freq)) +
 plot_10
 ```
 ### 2010
-The top frequented words for NYT articles in 2010 is economi, jobless, new, Obama, rate, and recess. The word "Obama" was the most interesting to see as the word was not a top frequenter in 2008. Most likely due to Obama being elected into office in 2008. The jobless, rate, new and economi are still top frequenters.
+The top frequented words for NYT articles in 2010 are "economi", "jobless", "new", "Obama", "rate", and "recess". The word "Obama" was the most interesting to see as the word was not a top frequenter in 2008. The jobless, rate, new, and economi are still top frequenters.
 ```{r}
 plot_10
 ```
@@ -454,7 +438,6 @@ plot_12<-ggplot(data= top2012,aes(word.f, freq,fill=freq)) +
 ```
 
 ### 2012
-
 Not much is different between 2012 and the previous years. There are less articles using the word "jobless" than before. 
 ```{r}
 plot_12
@@ -502,7 +485,7 @@ plot_16<-ggplot(data= top2016,aes(word.f, freq,fill=freq)) +
   ylim(0, 45)
 ```
 
-In 2016, there is a high frequency of articles including economy. One of the reasons for increase in articles revolving economy could be due to Former President Trump being elected into office. 
+In 2016, a high frequency of articles includes "economy". A reason for the increase in articles revolving the economy could be due to Former President Trump being elected into office.  
 ```{r}
 plot_16
 ```
@@ -596,70 +579,11 @@ dtm_d_2022.copy<-data.frame(append(dtm_d_2022, c(Year='2022'), after=1))
 
 total <-rbind(dtm_d_2008.copy,dtm_d_2010.copy,dtm_d_2012.copy,dtm_d_2014.copy,dtm_d_2016.copy,dtm_d_2018.copy,dtm_d_2020.copy,dtm_d_2022.copy)
 
-total
-
-a<-unique(total$word.f)
-a<-as.data.frame(a)
-a$freq_2008<-dtm_d_2008$freq
-
-
-a <- cbind(a, dtm_d_2008[c("freq")])
-
-head(dtm_d_2008)
-```
-
-
-
-```{r}
-top08<-dtm_d_2008%>%
-  slice(1:6)
-top10<-dtm_d_2010%>%
-  slice(1:6)
-top12<-dtm_d_2012%>%
-  slice(1:6)
-top14<-dtm_d_2014%>%
-  slice(1:6)
-top16<-dtm_d_2016%>%
-  slice(1:6)
-top18<-dtm_d_2018%>%
-  slice(1:6)
-top20<-dtm_d_2020%>%
-  slice(1:6)
-top22<-dtm_d_2022%>%
-  slice(1:6)
-
-dtm_d_2008.copy<-data.frame(append(top08, c(Year='2008'), after=1))
-
-dtm_d_2010.copy<-data.frame(append(top10, c(Year='2010'), after=1))
-
-dtm_d_2012.copy<-data.frame(append(top12, c(Year='2012'), after=1))
-
-dtm_d_2014.copy<-data.frame(append(top14, c(Year='2014'), after=1))
-
-dtm_d_2016.copy<-data.frame(append(top16, c(Year='2016'), after=1))
-
-dtm_d_2018.copy<-data.frame(append(top18, c(Year='2018'), after=1))
-
-dtm_d_2020.copy<-data.frame(append(top20,c(Year='2020'), after=1))
-
-dtm_d_2022.copy<-data.frame(append(top12, c(Year='2022'), after=1))
-
-total1 <-rbind(dtm_d_2008.copy,dtm_d_2010.copy,dtm_d_2012.copy,dtm_d_2014.copy,dtm_d_2016.copy,dtm_d_2018.copy,dtm_d_2020.copy,dtm_d_2022.copy)
-
 total$Year<-factor(total$Year)
-group_by()
-dtm_d_2022.copy
-top08
-top10
-top12
-top14
-top16
-top18
-top20
-top22
 ```
+
 ### Time Series Plot
-It would be interesting to see how top 
+
 ```{r echo=FALSE}
 word_econ<-filter(total, word.f=="economi"|word.f=="economy")
 word_econ$Year<-as.numeric(word_econ$Year)
@@ -1050,16 +974,17 @@ The following questions were asked in the beginning of this project:
 gTrends was used find the number of hits for Google Searches for specific keywords
 
 ## Key Take Aways Regarding Sentiment Analysis
+Trust is always high -- the levels are different for each year -- 
 
 ## Key Take Aways Regarding Whole Project
 
 ### Limitations
-
+The New York Times API is a bit hard to work with in R. I initially desired a larger sample of articles for each year however, I was limited to 10. After 10, the New York Times API results in an error message.
 ### What Could Have Been Done Better
 The data cleaning aspect could have been done better. Many of the words repeatedly appeared in the top frequent word portion. These word duplicates made the plots confusing as the same words appeared more than once. 
 
 ### How Could This Project Be Expanded
-This project could be expanded by examining real unemployment, unemployment benefit, and inflation data.
+This project could be expanded by examining real unemployment, unemployment benefit, and inflation data. This project could also be expanded by using a larger sample of articles and being more specific in queries. 
 
 ## References
 
