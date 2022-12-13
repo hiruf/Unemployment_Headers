@@ -24,9 +24,9 @@ library(ggpubr)
 ```
 
 ## Introduction
-  This project examines headlines and snippets regarding unemployment. Articles from The New York Times are collected from The New York Times API, starting from 2008, the middle of a recession, to the present day. The headlines and snippets are analyzed to find the most frequented words and how the text has changed throughout the years. The keywords in the articles may also highlight other concerns that Americans have that are not related to unemployment, such as inflation. Therefore, this project will answer the following questions :
-  1. How has the wording in headlines and snippets changed regarding unemployment from 2008 to 2022?
-  2. Can headline and snippet wording regarding unemployment shed light on other concerns Americans may have?
+  This project examines headlines and snippets regarding unemployment. Articles from The New York Times are collected from The New York Times API, starting from 2008, the middle of a recession, to the present day. The headlines and snippets are analyzed to find the most frequented words and how the text has changed throughout the years. The keywords in the articles may also highlight other concerns that Americans have that are not related to unemployment, such as inflation. Therefore, this project will answer the following question:
+  1. How has the wording in headlines and snippets changed or stayed the same regarding unemployment from 2008 to 2022?
+
   
 ### Data Collection
 The New York Times API has many unique features. One of the features is the ability to find articles using a specific keyword and year. For this project, I queried the word "unemployment" from every other year between 2008 to 2022. After querying, the result will be a snippet and headline character variable for each year specified. An RPubs tutorial released by Vicentwx aided in collecting the data as they have written an extensive article outlining how to use The New York Times article search feature and how to clean the data [@vincentwx_2019].
@@ -584,6 +584,10 @@ total$Year<-factor(total$Year)
 
 ### Time Series Plot
 
+For the next portion of the analysis, a line plot has been made to indicate the frequency of specific words between 2008 and 2022. A new data frame has been made with all the words and years combined. Each line on the line plot represents a different word. The blue line indicates the frequency of "economi" and "economy". The green line indicates the frequency of the "benefit". The purple line indicates the frequency of "rate". Lastly, the black line indicates the frequency of "unemployment" and "unemploy". Sadly, a legend was unable to be made, which would have made identifying the lines easier. 
+
+The black line for "unemployment" was the highest in the sample in 2008 during the recession. The black line is the lowest in 2022. The purple line for "rate" is the highest for the sample in 2014 and the lowest in 2020. The green line regarding "benefit" began in 2010, perhaps in conjunction with Obama Care. The green line hit a peak in 2020 when the COVID-19 Pandemic led to shut downs. The blue line for "economy" indicates the peak for the sample occurred in 2022. 
+
 ```{r echo=FALSE}
 word_econ<-filter(total, word.f=="economi"|word.f=="economy")
 word_econ$Year<-as.numeric(word_econ$Year)
@@ -601,8 +605,6 @@ word_rate
 word_r<-filter(total, word.f=="unemploy"|word.f=="unemployment")
 word_r$Year<-as.numeric(word_r$Year)
 word_r
-
-
 
 word_econ
 Complete.ts.plot <- ggplot()+
@@ -623,7 +625,7 @@ Complete.ts.plot
 ```
 
 
-##Gtrends -
+##Gtrends
 ```{r echo=FALSE}
 econ_08.1 <- gtrends(keyword="economy", time="2007-01-01 2022-12-11",geo="US")
 
@@ -687,7 +689,7 @@ ggplot(infla, aes(x=date, y=hits, group = 1)) +
 ```
 
 ## Sentiment Analysis
-A sentiment analysis was done using the New York Times headers and snippets regarding unemployment. This was done to analyze the emotions behind the text to show what the sentiment was for every other year between 2008 to 2022. The website ____ code was used to aid with the sentiment analysis.
+A Sentiment analysis using the New York Times headers and snippets regarding unemployment is the next portion of the analysis. The sentiment analysis analyzes emotions behind the text to show what the sentiment was for every other year between 2008 to 2022. The article "Text Mining and Sentiment Analysis: Analysis with R" was used to aid in the sentiment analysis. [@senti]
 
 ### 2008 
 
@@ -857,7 +859,8 @@ plot_sent_2016<- senti_16 %>%
 
 plot_sent_2016
 ```
-
+### 2018
+Anticipation, fear, and anger has decreased while trust remains high.
 ```{r echo=FALSE}
 senti_18<-dtm_d_2018 %>%
   dplyr::mutate(words = n()) %>%
@@ -889,7 +892,9 @@ plot_sent_2018<- senti_18 %>%
 
 plot_sent_2018
 ```
+### 2020
 
+Anticipation has increased again from 2018, as well as fear. Sadness has also increased. These increases may be caused by the COVID-19 Pandemic. 
 ```{r echo=FALSE}
 senti_20<-dtm_d_2020 %>%
   dplyr::mutate(words = n()) %>%
@@ -921,7 +926,8 @@ plot_sent_2020<- senti_20 %>%
 
 plot_sent_2020
 ```
-
+### 2022
+Anticipation is at a high at heights comparable to trust.
 ```{r echo=FALSE}
 senti_22<-dtm_d_2022 %>%
   dplyr::mutate(words = n()) %>%
@@ -962,26 +968,26 @@ ggarrange(plot_sent_2008,plot_sent_2010,plot_sent_2012,plot_sent_2014,plot_sent_
 
 ## Discussion
 
-## Key Take Aways Regarding Top Frequent Words
-After examining the top frequent words between 2008 and 2022, a few words reappeared in multiple years. Words like economy, rate, and jobless appeared in more than one year whereas there was also words that only appeared in one year. words like "Obama" or "Pandemic" were only top frequently written in that specific year.
+### Key Take Aways Regarding Top Frequent Words
+After examining the top frequent words between 2008 and 2022, a few words reappeared in multiple years. Words like "economy", "rate", and "jobless" appeared in more than one year, whereas there was also words that only appeared in one year. Words like "Obama" or "Pandemic" were only the top frequently words written in specific years, which are unique to them. 
 
-The following questions were asked in the beginning of this project:
-  1. How has the wording in headlines and snippets changed regarding unemployment from 2008 to 2022?
-      * The wording in the headlines and snippets frequently have the same words such as "economy", "rate", and "joblesS"
-  2. Can headline and snippet wording regarding unemployment shed light into other concerns that Americans may have?
+### Key Take Aways Regarding gTrendsR
+gTrendsR was used to find the number of hits for Google Searches for specific keywords. The number of hits was specified to the geographical location of the United States. The Google Trends API indicates that the searches for "Unemployment" and "Inflation" are much more searched after 2020 than before it. Whereas, searches for the word "economy" were the highest in 2008.
 
-## Key Take Aways Regarding gTrendsR
-gTrends was used find the number of hits for Google Searches for specific keywords
+### Key Take Aways Regarding Sentiment Analysis
+The sentiment analysis for this project's sample of articles indicates that the trust sentiment is higher than other sentiments for all years except 2022. In 2022, the anticipation sentiment is higher than in past years. In general, all the sentiments changed levels throughout the years. There were increases in the joy sentiment, which may indicate a decrease in unemployment. If I were to expand on this project, comparing the increases in joy with the unemployment rate would be interesting!
 
-## Key Take Aways Regarding Sentiment Analysis
-Trust is always high -- the levels are different for each year -- 
+### Key Take Aways Regarding Whole Project
+The following question was asked in the beginning of this project:
+ 1. How has the wording in headlines and snippets changed or stayed the same regarding unemployment from 2008 to 2022?
 
-## Key Take Aways Regarding Whole Project
-
+While it is not possible to make a general statement, from this specific sample, the data indicate that similar words were used from 2008 to 2022. Words such as the economy, rate, and jobless were all commonly used in headers and snippets throughout the years. However, in specific years, there may be more articles released regarding special topics concerning unemployment such as a new president, a heavier emphasis on the economy, or inflation is high. 
+      
 ### Limitations
-The New York Times API is a bit hard to work with in R. I initially desired a larger sample of articles for each year however, I was limited to 10. After 10, the New York Times API results in an error message.
+The New York Times API makes it difficult for R users to collect a large amount of data. Due to this, the sample size of articles was lower than I initially wanted to use. 
+
 ### What Could Have Been Done Better
-The data cleaning aspect could have been done better. Many of the words repeatedly appeared in the top frequent word portion. These word duplicates made the plots confusing as the same words appeared more than once. 
+The data cleaning aspect could have been done better. Many of the words repeatedly appeared in the top frequent word portion. Word duplicates make the plots confusing since the same words appears more than once. Additionally, I also, could have found a more efficient way to gather data. 
 
 ### How Could This Project Be Expanded
 This project could be expanded by examining real unemployment, unemployment benefit, and inflation data. This project could also be expanded by using a larger sample of articles and being more specific in queries. 
