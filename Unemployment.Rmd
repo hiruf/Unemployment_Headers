@@ -11,12 +11,10 @@ library(knitr)
 library(dplyr)
 library(tidyr)
 library(ggplot2)
-library("tm")
-library("SnowballC")
-library("wordcloud")
-library("RColorBrewer")
-library("syuzhet")
-library("gtrendsR")
+library(tm)
+library(SnowballC)
+library(syuzhet)
+library(gtrendsR)
 remotes::install_github("news-r/nytimes")
 library(jsonlite)
 library(stringr)
@@ -400,7 +398,8 @@ plot_08<-ggplot(data= top2008,aes(word.f, freq,fill=freq)) +
   theme(legend.position = "none") +
   ggtitle("Top Frequented Words in NYT Articles \n Regarding Unemployment in 2008")+
   xlab("Word")+ ylab("Frequency")+
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5))+
+  ylim(0, 45)
 ```
 
 ### 2008
@@ -426,7 +425,8 @@ plot_10<-ggplot(data= top2010,aes(word.f, freq,fill=freq)) +
   theme(legend.position = "none") +
   ggtitle("Top Frequented Words in NYT Articles \n Regarding Unemployment in 2010")+
   xlab("Word")+ ylab("Frequency")+
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5))+
+  ylim(0, 45)
 
 plot_10
 ```
@@ -449,7 +449,8 @@ plot_12<-ggplot(data= top2012,aes(word.f, freq,fill=freq)) +
   theme(legend.position = "none") +
   ggtitle("Top Frequented Words in NYT Articles \n Regarding Unemployment in 2012")+
   xlab("Word")+ ylab("Frequency")+
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5))+
+  ylim(0, 45)
 ```
 
 ### 2012
@@ -473,7 +474,8 @@ plot_14<-ggplot(data= top2014,aes(word.f, freq,fill=freq)) +
   theme(legend.position = "none") +
   ggtitle("Top Frequented Words in NYT Articles \n Regarding Unemployment in 2014")+
   xlab("Word")+ ylab("Frequency")+
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5))+
+  ylim(0, 45)
 ```
 
 ### 2014
@@ -496,7 +498,8 @@ plot_16<-ggplot(data= top2016,aes(word.f, freq,fill=freq)) +
   theme(legend.position = "none") +
   ggtitle("Top Frequented Words in NYT Articles \n Regarding Unemployment in 2016")+
   xlab("Word")+ ylab("Frequency")+
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5))+
+  ylim(0, 45)
 ```
 
 In 2016, there is a high frequency of articles including economy. One of the reasons for increase in articles revolving economy could be due to Former President Trump being elected into office. 
@@ -518,7 +521,8 @@ plot_18<-ggplot(data= top2018,aes(word.f, freq,fill=freq)) +
   theme(legend.position = "none") +
   ggtitle("Top Frequented Words in NYT Articles \n Regarding Unemployment in 2018")+
   xlab("Word")+ ylab("Frequency")+
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5))+
+  ylim(0, 45)
 ```
 In 2018, the articles including unemployment and economy is higher than previous years including 2016. Business is also a top word that has not appeared in the top in past years. 
 ```{r}
@@ -538,7 +542,8 @@ plot_20<-ggplot(data= top2020,aes(word.f, freq,fill=freq)) +
   theme(legend.position = "none") +
   ggtitle("Top Frequented Words in NYT Articles \n Regarding Unemployment in 2020")+
   xlab("Word")+ ylab("Frequency")+
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5))+
+  ylim(0, 45)
 ```
 One of the top words for this year is pandemic as COVID-19 led to shut downs and job loss concerns. People began turning to benefits due to unemployment and shut downs that forced many to stay at home. 
 ```{r}
@@ -559,7 +564,8 @@ plot_22<-ggplot(data= top2022,aes(word.f, freq,fill=freq)) +
   theme(legend.position = "none") +
   ggtitle("Top Frequented Words in NYT Articles \n Regarding Unemployment in 2022")+
   xlab("Word")+ ylab("Frequency")+
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5))+
+  ylim(0, 45)
 ```
 In 2022, economy is still an important word as well as rate. The word "inflation" is a top frequent word that has not appeared in previous years.  
 ```{r}
@@ -756,7 +762,12 @@ ggplot(infla, aes(x=date, y=hits, group = 1)) +
   theme(plot.title = element_text(hjust = 0.5))
 ```
 
-### Sentiment Analysis
+## Sentiment Analysis
+A sentiment analysis was done using the New York Times headers and snippets regarding unemployment. This was done to analyze the emotions behind the text to show what the sentiment was for every other year between 2008 to 2022. The website ____ code was used to aid with the sentiment analysis.
+
+### 2008 
+
+The sentiment analysis for 2008 words has the highest percentage score for trust. However, fear and sadness is also at a high. 
 ```{r echo=FALSE}
 senti_08<-dtm_d_2008 %>%
   dplyr::mutate(words = n()) %>%
@@ -789,7 +800,8 @@ plot_sent_2008<- senti_08 %>%
 plot_sent_2008
 ```
 
-
+### 2010 
+Unlike 2008, the percetange in joy is higher in 2010. Trust has increased and is at 6%. Disgust, anger, and sadness is lower in 2010 as well. 
 
 ```{r echo=FALSE}
 senti_10<-dtm_d_2010 %>%
@@ -822,7 +834,8 @@ plot_sent_2010<- senti_10 %>%
 
 plot_sent_2010
 ```
-
+### 2012
+Trust in 2012 has increased percentage is higher than in previous years. However, anger has also increased. 
 ```{r echo=FALSE}
 senti_12<-dtm_d_2012 %>%
   dplyr::mutate(words = n()) %>%
@@ -854,7 +867,8 @@ plot_sent_2012<- senti_12 %>%
 
 plot_sent_2012
 ```
-
+### 2014
+Anger and fear has decreased since 2012 where as anticipation and joy has increased.
 ```{r echo=FALSE}
 senti_14<-dtm_d_2014 %>%
   dplyr::mutate(words = n()) %>%
@@ -886,7 +900,8 @@ plot_sent_2014<- senti_14 %>%
 
 plot_sent_2014
 ```
-
+### 2016
+Anger, fear and sadness has seen an increase since 2014.
 ```{r echo=FALSE}
 senti_16<-dtm_d_2016 %>%
   dplyr::mutate(words = n()) %>%
@@ -1020,6 +1035,24 @@ plot_sent_2022
 ggarrange(plot_sent_2008,plot_sent_2010,plot_sent_2012,plot_sent_2014,plot_sent_2016,plot_sent_2018,plot_sent_2020,plot_sent_2022)
 ```
 
+
+## Discussion
+
+## Key Take Aways Regarding Top Frequent Words
+
+## Key Take Aways Regarding gTrendsR
+
+## Key Take Aways Regarding Sentiment Analysis
+
+## Key Take Aways Regarding Whole Project
+
+### Limitations
+
+### What Could Have Been Done Better
+
+### How Could This Project Be Expanded
+
+## References
 
 
 
