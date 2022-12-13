@@ -734,7 +734,8 @@ ggplot(econ_08, aes(x=date, y=hits, group = 1)) +
   ylab("Hits")+
   theme(plot.title = element_text(hjust = 0.5))
 ```
-
+### Unemployment
+The number of hits regarding employment hit 100 in 2020.Prior to 2020, the past years did not see hits beyond 20. 
 ```{r echo=FALSE}
 ggplot(unemp, aes(x=date, y=hits, group = 1)) +
   geom_line()+
@@ -743,6 +744,8 @@ ggplot(unemp, aes(x=date, y=hits, group = 1)) +
   ylab("Hits")+
   theme(plot.title = element_text(hjust = 0.5))
 ```
+### Inflation
+The number of hits regarding inflation steadily increased after 2020. 
 
 ```{r echo=FALSE}
 ggplot(infla, aes(x=date, y=hits, group = 1)) +
@@ -754,7 +757,7 @@ ggplot(infla, aes(x=date, y=hits, group = 1)) +
 ```
 
 ### Sentiment Analysis
-```{r}
+```{r echo=FALSE}
 senti_08<-dtm_d_2008 %>%
   dplyr::mutate(words = n()) %>%
   dplyr::left_join(tidytext::get_sentiments("nrc")) %>%
@@ -780,14 +783,15 @@ plot_sent_2008<- senti_08 %>%
   ggtitle("Sentiment Analysis of 2008 NYT Articles")+
   xlab("Sentiment")+
   ylab("Percentage")+
-  theme(plot.title = element_text(hjust = 0.5)) 
+  theme(plot.title = element_text(hjust = 0.5))+
+  ylim(0, 7) 
 
 plot_sent_2008
 ```
 
 
 
-```{r}
+```{r echo=FALSE}
 senti_10<-dtm_d_2010 %>%
   dplyr::mutate(words = n()) %>%
   dplyr::left_join(tidytext::get_sentiments("nrc")) %>%
@@ -813,12 +817,13 @@ plot_sent_2010<- senti_10 %>%
   ggtitle("Sentiment Analysis of 2010 NYT Articles")+
   xlab("Sentiment")+
   ylab("Percentage")+
-  theme(plot.title = element_text(hjust = 0.5)) 
+  theme(plot.title = element_text(hjust = 0.5))+
+  ylim(0, 7) 
 
 plot_sent_2010
 ```
 
-```{r}
+```{r echo=FALSE}
 senti_12<-dtm_d_2012 %>%
   dplyr::mutate(words = n()) %>%
   dplyr::left_join(tidytext::get_sentiments("nrc")) %>%
@@ -844,12 +849,13 @@ plot_sent_2012<- senti_12 %>%
   ggtitle("Sentiment Analysis of 2012 NYT Articles")+
   xlab("Sentiment")+
   ylab("Percentage")+
-  theme(plot.title = element_text(hjust = 0.5)) 
+  theme(plot.title = element_text(hjust = 0.5))+
+  ylim(0,7)
 
 plot_sent_2012
 ```
 
-```{r}
+```{r echo=FALSE}
 senti_14<-dtm_d_2014 %>%
   dplyr::mutate(words = n()) %>%
   dplyr::left_join(tidytext::get_sentiments("nrc")) %>%
@@ -875,12 +881,13 @@ plot_sent_2014<- senti_14 %>%
   ggtitle("Sentiment Analysis of 2014 NYT Articles")+
   xlab("Sentiment")+
   ylab("Percentage")+
-  theme(plot.title = element_text(hjust = 0.5)) 
+  theme(plot.title = element_text(hjust = 0.5))+
+  ylim(0, 7)
 
 plot_sent_2014
 ```
 
-```{r}
+```{r echo=FALSE}
 senti_16<-dtm_d_2016 %>%
   dplyr::mutate(words = n()) %>%
   dplyr::left_join(tidytext::get_sentiments("nrc")) %>%
@@ -906,12 +913,13 @@ plot_sent_2016<- senti_16 %>%
   ggtitle("Sentiment Analysis of 2016 NYT Articles")+
   xlab("Sentiment")+
   ylab("Percentage")+
-  theme(plot.title = element_text(hjust = 0.5)) 
+  theme(plot.title = element_text(hjust = 0.5))+
+  ylim(0, 7) 
 
 plot_sent_2016
 ```
 
-```{r}
+```{r echo=FALSE}
 senti_18<-dtm_d_2018 %>%
   dplyr::mutate(words = n()) %>%
   dplyr::left_join(tidytext::get_sentiments("nrc")) %>%
@@ -937,12 +945,13 @@ plot_sent_2018<- senti_18 %>%
   ggtitle("Sentiment Analysis of 2018 NYT Articles")+
   xlab("Sentiment")+
   ylab("Percentage")+
-  theme(plot.title = element_text(hjust = 0.5)) 
+  theme(plot.title = element_text(hjust = 0.5))+
+  ylim(0, 7) 
 
 plot_sent_2018
 ```
 
-```{r}
+```{r echo=FALSE}
 senti_20<-dtm_d_2020 %>%
   dplyr::mutate(words = n()) %>%
   dplyr::left_join(tidytext::get_sentiments("nrc")) %>%
@@ -968,12 +977,13 @@ plot_sent_2020<- senti_20 %>%
   ggtitle("Sentiment Analysis of 2020 NYT Articles")+
   xlab("Sentiment")+
   ylab("Percentage")+
-  theme(plot.title = element_text(hjust = 0.5)) 
+  theme(plot.title = element_text(hjust = 0.5))+
+  ylim(0, 7)
 
 plot_sent_2020
 ```
 
-```{r}
+```{r echo=FALSE}
 senti_22<-dtm_d_2022 %>%
   dplyr::mutate(words = n()) %>%
   dplyr::left_join(tidytext::get_sentiments("nrc")) %>%
@@ -999,7 +1009,8 @@ plot_sent_2022<- senti_22 %>%
   ggtitle("Sentiment Analysis of 2022 NYT Articles")+
   xlab("Sentiment")+
   ylab("Percentage")+
-  theme(plot.title = element_text(hjust = 0.5)) 
+  theme(plot.title = element_text(hjust = 0.5))+
+  ylim(0, 7) 
 
 plot_sent_2022
 ```
